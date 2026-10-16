@@ -1,0 +1,44 @@
+# Edit this file, commit, push. The workflow rebuilds and publishes automatically.
+contact: "admin@sspicatalog.local"       # User-Agent string for Archive.org queries
+catalog_name: "PS4 Homebrew Storefront"
+
+# Leave empty: inside GitHub Actions it is derived as https://<user>.github.io/<repo>
+pages_base_url: ""
+
+link_style: canonical       # Uses https://archive.org/download/... to guarantee long-term link stability
+mirror_art: false           # Hotlinks IA images directly to save GitHub build time and keep the catalog lightweight
+
+categories: ["Homebrew Apps", "Emulators", "Demos", "Media & Utilities"]
+
+# Active Internet Archive identifiers, collections, and queries for PS4 homebrew content
+sources:
+  # Popular PS4 Homebrew Utilities & Homebrew Apps
+  - type: query
+    value: 'subject:"ps4 homebrew" OR subject:"ps4 pkg"'
+    category: "Homebrew Apps"
+    max_items: 150
+
+  # PS4 Emulators & Open Source Game Engines
+  - type: query
+    value: 'subject:"ps4 emulator" OR subject:"retroarch ps4"'
+    category: "Emulators"
+    max_items: 100
+
+  # PS4 Demos & Public Samples
+  - type: query
+    value: 'subject:"ps4 demo" OR subject:"ps4 homebrew game"'
+    category: "Demos"
+    max_items: 100
+
+  # Media Players, File Managers, and System Tools
+  - type: query
+    value: 'subject:"ps4 utility" OR subject:"ps4 payload"'
+    category: "Media & Utilities"
+    max_items: 100
+
+blocklist: []          # Identifiers to always exclude
+
+artwork_overrides: {}  # Optional custom artwork links if specific items lack thumbnails
+
+max_error_ratio: 0.5   # Allows up to 50% lookup failures during IA maintenance without breaking existing builds
+min_entries: 1
