@@ -1,0 +1,66 @@
+# Configuration for generate_static_catalog.py
+
+catalog:
+  name: "My Custom Catalog"
+  icon: "https://example.com/icon.png"
+  categories:
+    - "Games"
+    - "Homebrew Apps"
+  default_category: ""            # empty -> first entry of `categories`
+  output_path: "source.gssource"  # or "source.json"
+  # Used when an item has no thumbnail of its own
+  fallback_image: "https://archive.org/images/glogo.jpg"
+
+archive:
+  search_url: "https://archive.org/advancedsearch.php"
+  metadata_url: "https://archive.org/metadata"
+  download_base: "https://archive.org/download"
+  thumbnail_base: "https://archive.org/services/img"
+  rows_per_page: 100          # max 1000
+  request_timeout: 30         # seconds
+  retries: 4                  # automatic retries on 429/5xx/connection errors
+  backoff_factor: 1.5
+  delay_between_requests: 0.5 # seconds; be polite to archive.org
+  user_agent: "static-catalog-generator/1.0 (+https://github.com/your-name/your-repo)"
+
+# Regexes (case-insensitive) matched against each file name in an item.
+file_patterns:
+  - '\.pkg$'
+  - '\.z\d{2,}$'          # .z01, .z02 ... (split zip)
+  - '\.part0*\d+\.rar$'   # .part1.rar, .part01.rar ...
+  - '\.7z\.\d{3}$'        # .7z.001, .7z.002 ...
+
+# Maps the generator's internal fields to the key names written in each
+# package object. Adjust the right-hand side to match your consumer's schema,
+# or set a value to null to omit that field.
+package_fields:
+  id: id
+  identifier: identifier
+  title: title
+  description: description
+  category: category
+  icon: icon
+  size: size              # bytes
+  downloadURL: url        # https://archive.org/download/<identifier>/<filename>
+  filename: filename
+  type: type              # "pkg" or "split-archive"
+  parts: parts            # only present for split archives
+  itemURL: itemURL
+
+max_description_length: 600
+
+# Archive.org advanced-search queries (Lucene syntax).
+# `category` must be a name you want shown in the catalog's category list.
+# Only index content you are entitled to distribute or link to.
+queries:
+  - name: "Example: software items mentioning homebrew"
+    query: 'mediatype:software AND title:(homebrew)'
+    category: "Homebrew Apps"
+    max_items: 50
+
+# Direct item identifiers (the part after /details/ in the item URL).
+# Each entry may be a plain string or {id: ..., category: ...}.
+items: []
+#  - some-item-identifier
+#  - id: another-item-identifier
+#    category: "Games"
